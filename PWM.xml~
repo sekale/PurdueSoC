@@ -1,0 +1,148 @@
+<module name="PWM">
+	The PWM peripheral for the AFTx04 allows the user to create and manipulate signals to their discretion. The PWM includes the functionality to modify the period and duty cycle of the output. The user can create upto 10 different PWN signals routed to predefined GPIO pins. Functionality for left and center aligned modes is provided at both high and low polarity.
+
+	<register name="PWME" offset="0x00">
+		This is a 9-bit register. Each bit corresponds to a different PWM pin. Setting a bit will set the corresponding pin.
+
+		<field name = "PWME0">
+		</field>
+
+
+		<field name = "PWME1">
+		</field>
+
+
+		<field name = "PWME2">
+		</field>
+
+
+		<field name = "PWME3">
+		</field>
+
+
+		<field name = "PWME4">
+		</field>
+
+
+		<field name = "PWME5">
+		</field>
+
+
+		<field name = "PWME6">
+		</field>
+
+
+		<field name = "PWME7">
+		</field>
+
+
+		<field name = "PWME8">
+		</field>
+
+		<field name = "PWME9">
+		</field>
+		
+	</register>
+
+<!-- PWM Duty Registers. PWMDTY0 corresponds to register 0 of the (0-9) registers for the 10 PWM pins -->
+	<register name="PWMD0" offset ="0x04">
+	</register>
+
+	<register name="PWMD1" offset ="0x08">
+	</register>
+
+	<register name="PWMD2" offset ="0x0C">
+	</register>
+
+	<register name="PWMD3" offset ="0x10">
+	</register>
+
+	<register name="PWMD4" offset ="0x14">
+	</register>
+
+	<register name="PWMD5" offset ="0x18">
+	</register>
+
+	<register name="PWMD6" offset ="0x1C">
+	</register>
+
+	<register name="PWMD7" offset ="0x20">
+	</register>
+
+	<register name="PWMD8" offset ="0x24">
+	</register>
+
+	<register name="PWMD9" offset ="0x28">
+	</register>
+<!-- PWM Duty Registers. PWMDTY0 corresponds to register 0 of the (0-9) registers for the 10 PWM pins -->
+
+<!-- This register corresponds to a clock divider, allowing the period of the PWM to be between half the clock speed and the clock speed. Setting each bit to 1 will result in the fastest period, or the clock speed. Similarly a different period can be programed by changing the value of the register.
+ -->
+	<register name="PWMR0" offset ="0x2C">
+
+	</register>
+
+	<register name="PWMR1" offset ="0x30">
+	</register>
+
+	<register name="PWMR2" offset ="0x34">
+	</register>
+
+	<register name="PWMR3" offset ="0x38">
+	</register>
+
+	<register name="PWMR4" offset ="0x3C">
+	</register>
+
+	<register name="PWMR5" offset ="0x40">
+	</register>
+
+	<register name="PWMR6" offset ="0x44">
+	</register>
+
+	<register name="PWMR7" offset ="0x48">
+	</register>
+
+	<register name="PWMR8" offset ="0x4C">
+	</register>
+
+	<register name="PWMR9" offset ="0x50">
+	</register>
+<!-- PWM Duty Registers. PWMRTY0 corresponds to register 0 of the (0-9) registers for the 10 PWM pins -->
+
+<!-- This register determines both alignment and polarity of the output. The default of the control register is left-aligned and positive polarity. To set the output to center-aligned mode set PWMCX0 to 1. To set the output to negative polarity set PWMCX1 to 1.
+ -->
+	<register name="PWMC0" offset ="0x54">
+
+	</register>
+
+	<register name="PWMC1" offset ="0x58">
+	</register>
+
+	<register name="PWMC2" offset ="0x6C">
+	</register>
+
+	<register name="PWMC3" offset ="0x70">
+	</register>
+
+	<register name="PWMC4" offset ="0x74">
+	</register>
+
+	<register name="PWMC5" offset ="0x78">
+	</register>
+
+	<register name="PWMC6" offset ="0x8C">
+	</register>
+
+	<register name="PWMC7" offset ="0x84">
+	</register>
+
+	<register name="PWMC8" offset ="0x88">
+	</register>
+
+	<register name="PWMR9" offset ="0x50">
+	</register>
+<!-- PWM Duty Registers. PWMRTY0 corresponds to register 0 of the (0-9) registers for the 10 PWM pins -->
+
+</module>
+
