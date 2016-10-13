@@ -1,0 +1,106 @@
+<module name="i2c">
+  This is a description of the module
+
+  <register name="tx_data" offset="0x00">
+    The I2C module mantains a TX FIFO of bytes to be transmitted on the line.  When writing to this register, everything but the lowest byte is ignored.
+    A byte written to this register is added to the TX FIFO to be transmitted.
+  </register>
+
+  <register name="control" offset="0x04">
+    This register contains various bit fields to set control flags for the I2C module.  It is also readable.
+
+    <field name="address_mode">
+      Whether the master/slave is in 7bit or 10bit addressing mode.
+
+      <value name="7bit" val="0">
+	The I2C will send and excpect 7 bit addresses.  The entire address can be sent in one byte.
+      </value>
+
+      <value name="10bit" val="1">
+	The I2C will send and expect 10 bit addresses.  The entire address must be sent in two bytes.
+      </value>
+    </field>
+
+    <field name="ms_select">
+      Choose whether the I2C is in master or slave mode.  The I2C module can be only one or the other.  It cannot operate as a master and a slave at the same time.
+
+      <value name="slave" val="0">
+	Put the I2C module into slave mode.
+      </value>
+      <value name="master" val="1">
+	Put the I2C module into master mode.
+      </value>
+
+    </field>
+
+    <field name="packet_size" size="5">
+      A simple integer that is meant to indicate how long a packet should be
+      in bytes.  It is relevant only for master mode as a slave will simply
+      keep receiving/transmitting until the master indicates that the 
+      transmission has completed. A value of 0 is used to indicate a packet size of 32.
+    </field>
+
+    <field name = "rw_select">
+      Only relevant in master mode. This is whether the master will be reading
+      or writing from the slave device.
+
+      <value name="WRITE" val="0">
+	The master will be writing (or transmitting) to the slave device.
+      </value>
+      <value name="READ" val="1">
+	The master will be reading (or receiving) from the slave device.
+      </value>
+    </field>
+    <field name="transaction_begin">
+      Only relevant in master mode.  Write a '1' to this bit to tell the master
+      to start the transaction, whether it be a read or write transaction.  The hardware may clear this flag 
+    </field>
+
+    <field name="clk_stretch_enable">
+      Only relevant in slave mode.  A '1' indicates that the the slave may
+      prolong the transaction by holding the CLK line low.  This happens if
+      the master is reading from the slave and the TX FIFO is empty or if the
+      master is writing to the slave and the RX FIFO is full.
+    </field>
+  </register>
+
+  <register name="address" offset="0x08">
+  </register>
+
+  <register name="rx_data" offset="0x0C">
+  </register>
+
+  <register name="status" offset="0x10">
+    <field name="ack_error">
+      The other device failed to send an acknowledge bit, so the transaction was terminated early.
+    </field>
+    <field name="line_busy">
+      The I2C bus is currently busy.
+    </field>
+    <field name="transaction_complete">
+    </field>
+    <field name="arbitration_lost">
+    </field>
+    <field name="i2c_busy">
+    </field>
+    <field name="mid_transaction_rx_full">
+    </field>
+    <field name="mid_transaction_tx_empty">
+    </field>
+    <field name="rx_fifo_empty">
+    </field>
+    <field name="rx_fifo_full">
+    </field>
+    <field name="rx_fifo_overflow_err">
+    </field>
+    <field name="tx_fifo_empty">
+    </field>
+    <field name="tx_fifo_full">
+    </field>
+    <field name="tx_underflow_err">
+    </field>
+  </register>
+
+  <register name="clk_div" offset="0x14">
+  </register>
+</module>
