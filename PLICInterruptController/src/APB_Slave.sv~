@@ -1,0 +1,129 @@
+// File name:   APB_Slave
+// Created:     02/02/2017
+// Author:      Siddhant Ekale
+// Version:     1.1 
+// Description: APB Slave Interface which sits between APB Bridge and Registers in the slave.
+
+module APB_Slave
+(
+    addrWidth = 32;
+    dataWidth = 32;
+);
+
+(
+input wire clk,
+input wire n_rst,
+input wire [addrWidth - 1:0] PADDR,
+input wire [dataWidth - 1:0] PDATA,
+input wire PENABLE,
+input wire PWRITE,
+input wire PSEL,
+
+//outputs
+output wire [dataWidth - 1:0] PRDATA,
+// output to slave registers
+output wire [NUM_REGS-1 : 0] write_enable,
+output wire [NUM_REGS-1 : 0] read_enable,
+output wire [dataWidth - 1:0] write_data,
+
+// input data from slave registers
+input wire [NUM_REGS-1 : 0][31:0] read_data,
+);
+
+local param BYTES_PER_WORD = 4;
+local param  = 8;
+local param NUM_PLIC_REGS = 8;
+
+reg i[NUM_PLIC_REGS - 1:0];
+reg address_match;
+reg [addrWidth - 1:0] ramAddr;
+reg ramRen;
+reg ramWen;
+
+typedef enum
+{
+    IDLE, READ_ACCESS, 
+}APB_STATE;
+
+APB_STATE state, nextState;
+
+
+
+//Checking if address matches any of PLIC specific addresses
+
+always_comb
+begin
+    for(i = 0; i < NUM_PLIC_REGS; ++i)
+    begin
+        if(PADDR == ($unsigned((i * BYTES_PER_WORD)) + $unsigned(ADDR_OFFSET)))
+        begin
+            address_match = 1'b1;
+            ramAddr = PADDR;
+            ramRen = (!PWRITE && PSEL && PENABLE);
+            ramWen = (PWRITE && PSEL && PENABLE);
+        end
+    end
+end
+
+// State Machine Register
+always_ff @(posedge clk, negedge n_rst) 
+begin
+	if (n_rst == 0) 
+    begin
+		state <= IDLE;
+	end 
+    else 
+    begin
+		state <= nextstate;
+	end
+end
+
+//Next State Logic
+
+always_comb
+begin
+    case(state)
+        IDLE:
+        begin
+            if(address_match == 1'b1 && ramRen == 1'b1)
+            begin
+                nextState = READ_ACCESS;
+            end
+        end
+
+        READ_ACCESS:
+        begin
+            if(ramRen == 1'b0)
+            begin
+                nextState = IDLE;
+            end
+        end
+
+        WRITE_ACCESS:
+        begin
+            if(ramWen == 1'b0)
+            begin
+                nextState = IDLE;
+            end
+        end
+    endcase
+end
+
+//Output Logic
+
+always_comb
+begin
+    case(state)
+        IDLE:
+        begin
+        end
+
+        READ_ACCESS:
+        begin
+            //active interrupt needing to be serviced
+        end
+    endcase    
+end
+
+
+endmodule
